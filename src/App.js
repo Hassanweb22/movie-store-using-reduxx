@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import NavBar from './Components/NavBar'
+import MyList from './Components/MyList'
+import Cards from './Components/Cards'
+import { connect } from "react-redux"
 import './App.css';
 
-function App() {
+function App(props) {
+  let { cards, empty } = props
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <NavBar />
+      <MyList text="Add List" />
+      <div className="container">
+        {cards.map((card, index) => {
+          return <Cards index={index} key={index} src={card.src} name={card.name} btnText="Remove"></Cards>
+        })}
+      </div>
+      <MyList text="Remove List" />
+
+      <div className="container">
+        {empty.map((empty, index) => {
+          return <Cards index={index} key={index} src={empty.src} name={empty.name} btnText="Add" ></Cards>
+        })}
+      </div>
+
     </div>
-  );
+  )
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  cards: state.app.cards,
+  empty: state.app.empty,
+  email: state.app.email,
+  counter: state.app.counter,
+})
+
+// const mapDispatchToProps = dispatch => {
+// return {
+//   set_Data: (counter) => dispatch(set_Data(counter)),
+//   increment: (counter) => dispatch(inc_counter(counter)),
+//   }
+// }
+export default connect(mapStateToProps)(App);
